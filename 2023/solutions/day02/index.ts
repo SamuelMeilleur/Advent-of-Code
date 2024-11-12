@@ -62,6 +62,6 @@ lines.forEach(line => {
     }
   }
 
-  power += Object.values(fewest_cubes).reduce((a, b) => a * b, 1)
+  power += Object.values(fewest_cubes).reduce((acc, value) => acc * value, 1)
 })
 console.log(`Part 2: ${power}`)

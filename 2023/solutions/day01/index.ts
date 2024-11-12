@@ -18,7 +18,7 @@ const answer1 = lines
     extractCalibrationValue(
       line.replace(/\D/g, '').split('')
     ))
-  .reduce((a, b) => a + b, 0)
+  .reduce((acc, value) => acc + value, 0)
 console.log(`Part 1: ${answer1}`)
 
 
@@ -28,5 +28,5 @@ const extractDigits = (line: string) =>
 
 const answer2 = lines
   .map(line => extractCalibrationValue(extractDigits(line)))
-  .reduce((a, b) => a + b, 0)
+  .reduce((acc, value) => acc + value, 0)
 console.log(`Part 2: ${answer2}`)

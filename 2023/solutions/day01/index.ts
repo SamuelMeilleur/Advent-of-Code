@@ -3,8 +3,8 @@
  * Day 01
  * https://adventofcode.com/2023/day/1
  */
-import { DIGITS, digitsRegExp } from '../../utils/constants';
-import data from './input';
+import { DIGITS, digitsRegExp } from './constants'
+import data from './input'
 
 const extractCalibrationValue = (digits: string[]) =>
   parseInt(`${digits.at(0)}${digits.at(-1)}`)

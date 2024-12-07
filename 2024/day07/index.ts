@@ -16,31 +16,32 @@ enum Operation {
   CONCATENATION,
 }
 
-const computeOperation = (operand1: number, operand2: number, operation: Operation) => {
+const reverseOperation = (value: number, operand: number, operation: Operation) => {
   switch (operation) {
-    case Operation.ADD:
-      return operand1 + operand2
     case Operation.MULTIPLY:
-      return operand1 * operand2
+      return value / operand
+    case Operation.ADD:
+      return value - operand
     case Operation.CONCATENATION:
-      return Number(String(operand1) + operand2)
-    default:
-      return operand1
+      return String(value).endsWith(String(operand))
+        ? Number(String(value).slice(0, -String(operand).length))
+        : -1
   }
 }
 
-const isValidEquation = (operationsNumber: number) => (equation: Equation) => {
-  const { operands } = equation
+const isValidEquation = (operations: Operation[]) => (equation: Equation) => {
+  const { result, operands } = equation
   const pairs = operands.length - 1
-  const combinations = operationsNumber ** pairs
+  const combinations = operations.length ** pairs
 
   for (let n = 0; n < combinations; n++) {
-    let result = operands[0]
+    let current = result
     for (let i = 0; i < pairs; i++) {
-      const operation = Math.floor(n / operationsNumber ** i) % operationsNumber
-      result = computeOperation(result, operands[i + 1], operation)
+      const operation = operations[Math.floor(n / operations.length ** i) % operations.length]
+      current = reverseOperation(current, operands.at(-(i + 1)), operation)
+      if (!Number.isInteger(current) || current < 0) break
     }
-    if (result === equation.result) {
+    if (current === operands[0]) {
       return true
     }
   }
@@ -55,7 +56,7 @@ const equations: Equation[] = data
   .map(([result, ...operands]) => ({ result, operands }))
 
 let result = equations
-  .filter(isValidEquation(2))
+  .filter(isValidEquation([Operation.MULTIPLY, Operation.ADD]))
   .reduce((sum, equation) => sum + equation.result, 0)
 
 console.log(`Part 1: ${result}`)
@@ -63,7 +64,7 @@ console.log(`Part 1: ${result}`)
 
 // Part 2
 result = equations
-  .filter(isValidEquation(3))
+  .filter(isValidEquation([Operation.MULTIPLY, Operation.ADD, Operation.CONCATENATION]))
   .reduce((sum, equation) => sum + equation.result, 0)
 
 console.log(`Part 2: ${result}`)

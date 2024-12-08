@@ -3,8 +3,8 @@
  * Day 08
  * https://adventofcode.com/2024/day/8
  */
-import data from './input'
 import { type Position, EMPTY, isInGrid } from '../../../../utils/grid'
+import data from './input'
 
 const grid = data
   .split('\n')

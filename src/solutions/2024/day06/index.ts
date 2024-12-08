@@ -3,8 +3,8 @@
  * Day 06
  * https://adventofcode.com/2024/day/6
  */
-import data from './input'
 import { type Position, EMPTY, isInGrid, moveInGrid } from '../../../../utils/grid'
+import data from './input'
 
 type Direction = [1, 0] | [-1, 0] | [0, 1] | [0, -1]
 const OBSTACLE = '#' as const

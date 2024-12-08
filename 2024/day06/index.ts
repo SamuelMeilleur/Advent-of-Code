@@ -4,15 +4,10 @@
  * https://adventofcode.com/2024/day/6
  */
 import data from './input'
+import { type Position, EMPTY, isInGrid, moveInGrid } from '../../utils/grid'
 
-type Position = [number, number]
 type Direction = [1, 0] | [-1, 0] | [0, 1] | [0, -1]
-
 const OBSTACLE = '#' as const
-const FLOOR = '.' as const
-
-const move = (position: Position, direction: Direction) =>
-  position.map((val, index) => val + direction[index])
 
 const map = data
   .split('\n')
@@ -21,7 +16,7 @@ const map = data
 // Part 1
 const startPosition = map
   .flatMap((row, y) => row.map((cell, x) =>
-    cell !== OBSTACLE && cell !== FLOOR ? [y, x] : null))
+    cell !== OBSTACLE && cell !== EMPTY ? [y, x] : null))
   .find(Boolean) as Position
 
 const seenPositions = new Set<string>()
@@ -29,8 +24,8 @@ let direction = [-1, 0] as Direction
 let position = [...startPosition] as Position
 while (true) {
   seenPositions.add(String(position))
-  const [y, x] = move(position, direction)
-  if (x < 0 || y < 0 || x >= map[0].length || y >= map.length) {
+  const [y, x] = moveInGrid(position, direction)
+  if (!isInGrid([y, x], map[0].length, map.length)) {
     break
   }
 
@@ -58,8 +53,8 @@ const isLoop = (grid: string[][], start: Position, newObstacle: Position) => {
       (seen.get(String(_position)) ?? []).concat(String(_direction))
     )
 
-    const [y, x] = move(_position, _direction)
-    if (x < 0 || y < 0 || x >= map[0].length || y >= map.length) {
+    const [y, x] = moveInGrid(_position, _direction)
+    if (!isInGrid([y, x], map[0].length, map.length)) {
       return false
     }
 

@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "description": "My implementation of Advent of Code by year",
   "scripts": {
-    "start": "./scripts/start.sh",
+    "start": "bash ./scripts/start.sh",
+    "clean": "rm -rf node_modules",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Samuel Meilleur",
@@ -11,10 +12,10 @@
   "type": "module",
   "dependencies": {
     "lodash-es": "^4.17.21",
-    "node": "^23.2.0",
+    "node": "^20.18.1",
     "npx": "^3.0.0",
     "tsx": "^4.19.2",
-    "typescript": "^5.6.3"
+    "typescript": "^5.7.2"
   },
   "devDependencies": {
     "@types/lodash-es": "^4.17.12"

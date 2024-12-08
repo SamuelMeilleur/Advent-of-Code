@@ -13,6 +13,6 @@ else
 fi
 
 clear
-yarn npx tsx ./$year/day$puzzle_n/index.ts
+yarn npx tsx src/$year/day$puzzle_n/index.ts
 
 read -e -p $'\n'"Press any key to end"

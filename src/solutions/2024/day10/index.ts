@@ -6,7 +6,7 @@
 import {
   findPositionsInGrid,
   getValueAtPosition,
-  moveInGrid,
+  movePosition,
   ORTHOGONAL_DIRECTIONS,
   type Position
 } from "../../../../utils/grid"
@@ -38,7 +38,7 @@ const getAccessibleTrailends = (grid: number[][]) => {
   for (let h = TRAILEND - 1; h >= TRAILHEAD; h--) {
     for (const position of elevationMap.get(h)) {
       for (const direction of ORTHOGONAL_DIRECTIONS) {
-        const neighbour = moveInGrid(position, direction)
+        const neighbour = movePosition(position, direction)
         const neighbourAccesses = accessibleTrailEnds.get(neighbour.toString())
         if (getValueAtPosition(grid, neighbour) !== h + 1
           || neighbourAccesses == null) {

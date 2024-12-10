@@ -6,11 +6,11 @@ export const ORTHOGONAL_DIRECTIONS = [
   [-1, 0], [0, 1], [1, 0], [0, -1]
 ] as Position[]
 
-export const isInGrid = (position: Position, width: number, height: number) =>
-  position[0] >= 0 && position[0] < height &&
-  position[1] >= 0 && position[1] < width
+export const isInGrid = <T>(grid: T[][], position: Position) =>
+  position[0] >= 0 && position[0] < grid?.length &&
+  position[1] >= 0 && position[1] < grid[0]?.length
 
-export const moveInGrid = (position: Position, movement: [number, number]) =>
+export const movePosition = (position: Position, movement: [number, number]) =>
   [position[0] + movement[0], position[1] + movement[1]] as Position
 
 export const getValueAtPosition = <T>(grid: T[][], position: Position) =>

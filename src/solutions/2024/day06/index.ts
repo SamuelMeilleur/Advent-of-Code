@@ -3,7 +3,7 @@
  * Day 06
  * https://adventofcode.com/2024/day/6
  */
-import { type Position, EMPTY, isInGrid, moveInGrid } from '../../../../utils/grid'
+import { type Position, EMPTY, isInGrid, movePosition } from '../../../../utils/grid'
 import data from './input'
 
 type Direction = [1, 0] | [-1, 0] | [0, 1] | [0, -1]
@@ -24,8 +24,8 @@ let direction = [-1, 0] as Direction
 let position = [...startPosition] as Position
 while (true) {
   seenPositions.add(String(position))
-  const [y, x] = moveInGrid(position, direction)
-  if (!isInGrid([y, x], map[0].length, map.length)) {
+  const [y, x] = movePosition(position, direction)
+  if (!isInGrid(map, [y, x])) {
     break
   }
 
@@ -43,25 +43,25 @@ console.log(`Part 1: ${seenPositions.size}`)
 // Part 2
 const isLoop = (grid: string[][], start: Position, newObstacle: Position) => {
   const seen = new Map<string, string[]>()
-  let _position = [...start] as Position
-  let _direction = [-1, 0] as Direction
+  let position = [...start] as Position
+  let direction = [-1, 0] as Direction
   while (true) {
-    if (seen.get(String(_position))?.includes(String(_direction))) {
+    if (seen.get(String(position))?.includes(String(direction))) {
       return true
     }
-    seen.set(String(_position),
-      (seen.get(String(_position)) ?? []).concat(String(_direction))
+    seen.set(String(position),
+      (seen.get(String(position)) ?? []).concat(String(direction))
     )
 
-    const [y, x] = moveInGrid(_position, _direction)
-    if (!isInGrid([y, x], map[0].length, map.length)) {
+    const [y, x] = movePosition(position, direction)
+    if (!isInGrid(map, [y, x])) {
       return false
     }
 
     if (grid[y][x] === OBSTACLE || (y === newObstacle[0] && x === newObstacle[1])) {
-      _direction = [_direction[1], -_direction[0]] as Direction
+      direction = [direction[1], -direction[0]] as Direction
     } else {
-      _position = [y, x]
+      position = [y, x]
     }
   }
 }

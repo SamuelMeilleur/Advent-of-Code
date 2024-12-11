@@ -9,13 +9,13 @@ import {
   movePosition,
   ORTHOGONAL_DIRECTIONS,
   type Position
-} from "../../../../utils/grid"
+} from '../../../../utils/grid'
 import data from './input'
 
 const TRAILHEAD = 0
-const TRAILEND = 9
+const SUMMIT = 9
 
-// returns a map of all positions at a given elevation (map-key)
+// returns a map of all positions at a same elevation (map-key)
 const computeElevationsMap = (grid: number[][]) => grid
   .flatMap((line, i) => (
     line.map((height, j) => (
@@ -23,71 +23,56 @@ const computeElevationsMap = (grid: number[][]) => grid
     ))
   ))
   .reduce((map, [elevation, position]) => (
-    map.set(elevation, [...(map.get(elevation) ?? []), position])
+    map.set(elevation, (map.get(elevation) ?? []).concat([position]))
   ), new Map<number, Position[]>())
 
 
-const getAccessibleTrailends = (grid: number[][]) => {
+// returns list of accessible summits from given position (map-key)
+const getAccessibleSummits = (grid: number[][]) => {
   const elevationMap = computeElevationsMap(grid)
-  const accessibleTrailEnds = elevationMap
-    .get(TRAILEND)
+  const accessibleSummits = elevationMap.get(SUMMIT)
     .reduce((map, trailend) => (
       map.set(trailend.toString(), [trailend.toString()])
     ), new Map<string, string[]>())
 
-  for (let h = TRAILEND - 1; h >= TRAILHEAD; h--) {
-    for (const position of elevationMap.get(h)) {
+  for (let height = SUMMIT - 1; height >= TRAILHEAD; height--) {
+    for (const position of elevationMap.get(height)) {
       for (const direction of ORTHOGONAL_DIRECTIONS) {
-        const neighbour = movePosition(position, direction)
-        const neighbourAccesses = accessibleTrailEnds.get(neighbour.toString())
-        if (getValueAtPosition(grid, neighbour) !== h + 1
+        const neighbourPosition = movePosition(position, direction)
+        const neighbourAccesses = accessibleSummits.get(neighbourPosition.toString())
+        if (getValueAtPosition(grid, neighbourPosition) !== height + 1
           || neighbourAccesses == null) {
           continue
         }
-
-        accessibleTrailEnds.set(
+        accessibleSummits.set(
           position.toString(),
-          (accessibleTrailEnds.get(position.toString()) ?? []).concat(neighbourAccesses)
+          (accessibleSummits.get(position.toString()) ?? []).concat(neighbourAccesses)
         )
       }
     }
   }
-
-  return accessibleTrailEnds
+  return accessibleSummits
 }
 
 const elevationGrid = data
   .split('\n')
   .map(line => line.split('').map(Number))
 
-const trailheads = findPositionsInGrid(elevationGrid, height => height === TRAILHEAD)
-
+const summitsByPosition = getAccessibleSummits(elevationGrid)
+const trailheads = findPositionsInGrid(elevationGrid, x => x === TRAILHEAD)
 
 // Part 1 
-const getTrailScore = (grid: number[][]) => {
-  const accessesMap = getAccessibleTrailends(grid)
-  return (trailhead: Position) => accessesMap
-    .get(trailhead.toString())
-    .reduce((set, trailend) => set.add(trailend), new Set())
-    .size
-}
-
 let score = trailheads
-  .map(getTrailScore(elevationGrid))
-  .reduce((sum, accesses) => sum + accesses, 0)
+  .map(trailhead => summitsByPosition.get(trailhead.toString()))
+  .map(summits => new Set(summits).size)
+  .reduce((sum, value) => sum + value, 0)
 
 console.log(`Part 1: ${score}`)
 
 
 // Part 2
-const getTrailRating = (grid: number[][]) => {
-  const accessesMap = getAccessibleTrailends(grid)
-  return (trailhead: Position) => accessesMap
-    .get(trailhead.toString()).length
-}
-
 score = trailheads
-  .map(getTrailRating(elevationGrid))
-  .reduce((sum, accesses) => sum + accesses, 0)
+  .map(trailhead => summitsByPosition.get(trailhead.toString())?.length)
+  .reduce((sum, value) => sum + value, 0)
 
 console.log(`Part 2: ${score}`)

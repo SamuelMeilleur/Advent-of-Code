@@ -5,7 +5,7 @@
  */
 import data from './input'
 
-const START = 'AAA';
+const START = 'AAA'
 const END = 'ZZZ'
 const DIRECTIONS = {
   L: 0,
@@ -22,8 +22,8 @@ lines.map(node => {
 })
 
 // Part 1
-let current = START;
-let steps = 0;
+let current = START
+let steps = 0
 while (current !== END) {
   for (const instruction of instructions) {
     current = network.get(current)[DIRECTIONS[instruction]]
@@ -31,7 +31,6 @@ while (current !== END) {
   }
 }
 console.log(`Part 1: ${steps}`)
-
 
 // Part 2
 const nodes = [...network.keys()]
@@ -41,7 +40,7 @@ const nodes = [...network.keys()]
 
 const loopLengths = []
 for (let node of nodes) {
-  let length = 0;
+  let length = 0
   while (node.match(/\w{2}Z/) == null) {
     for (const instruction of instructions) {
       node = network.get(node)[DIRECTIONS[instruction]]
@@ -54,21 +53,21 @@ for (let node of nodes) {
 function gcd(a: number, b: number) {
   // Euclidean algorithm
   while (b != 0) {
-    [b, a] = [a % b, b]
+    ;[b, a] = [a % b, b]
   }
-  return a;
+  return a
 }
 
 function lcm(a: number, b: number) {
-  return (a * b / gcd(a, b));
+  return (a * b) / gcd(a, b)
 }
 
 function lcmm(args: number[]) {
   if (args.length == 2) {
-    return lcm(args[0], args[1]);
+    return lcm(args[0], args[1])
   }
 
-  return lcm(args.shift(), lcmm(args));
+  return lcm(args.shift(), lcmm(args))
 }
 
 console.log(`Part 2: ${lcmm(loopLengths)}`)

@@ -1,12 +1,12 @@
 /**
- * Advent of Code 2023 
+ * Advent of Code 2023
  * Day 06
  * https://adventofcode.com/2023/day/6
  */
 import data from './input'
 
 interface Race {
-  time: number,
+  time: number
   distance: number
 }
 
@@ -22,17 +22,12 @@ const calculateWins = (race: Race) => {
 
 const [times, distances] = data
   .split('\n')
-  .map(line => line
-    .split(':')[1]
-    .trimStart()
-    .split(/\s+/)
-    .map(Number)
-  )
+  .map(line => line.split(':')[1].trimStart().split(/\s+/).map(Number))
 
 // Part 1
 const races = times.map((time, i) => ({
   time,
-  distance: distances[i]
+  distance: distances[i],
 }))
 
 const product = races
@@ -41,7 +36,6 @@ const product = races
 
 console.log(`Part 1: ${product}`)
 
-
 // Part 2
 const [time, distance] = [times, distances]
   .map(arr => arr.map(String).join(''))
@@ -49,6 +43,6 @@ const [time, distance] = [times, distances]
 
 const wins = calculateWins({
   time,
-  distance
+  distance,
 })
 console.log(`Part 2: ${wins}`)

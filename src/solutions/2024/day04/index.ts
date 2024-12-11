@@ -6,11 +6,9 @@
 import zip from 'lodash-es/zip'
 import data from './input'
 
-const lines = data
-  .split('\n')
+const lines = data.split('\n')
 
-const letters = lines
-  .map(line => line.split(''))
+const letters = lines.map(line => line.split(''))
 
 // Part 1
 const getVerticalLines = (letters: string[][]) => {
@@ -25,9 +23,7 @@ const getDiagonals = (letters: string[][]) => {
     for (let j = i; j >= 0; j--) {
       const x = j
       const y = i - j
-      if (x >= letters[0].length || y >= letters.length) {
-        continue
-      }
+      if (x >= letters[0].length || y >= letters.length) continue
 
       diagonal1 += letters[y][x]
       diagonal2 += letters[y][letters[0].length - x - 1]
@@ -45,17 +41,14 @@ let count = [
   ...lines,
   ...getVerticalLines(letters),
   ...getDiagonals(letters),
-].reduce((sum, line) => sum += [...line.matchAll(WORD)].length, 0)
+].reduce((sum, line) => (sum += [...line.matchAll(WORD)].length), 0)
 console.log(`Part 1: ${count}`)
-
 
 // Part 2
 count = 0
 for (let y = 1; y < letters.length - 1; y++) {
   for (let x = 1; x < letters[0].length - 1; x++) {
-    if (letters[y][x] !== 'A') {
-      continue
-    }
+    if (letters[y][x] !== 'A') continue
 
     const first = letters[y - 1][x - 1] + letters[y][x] + letters[y + 1][x + 1]
     const second = letters[y + 1][x - 1] + letters[y][x] + letters[y - 1][x + 1]

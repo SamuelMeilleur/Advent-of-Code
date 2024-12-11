@@ -1,5 +1,11 @@
-import { describe } from "node:test"
-import { findPositionsInGrid, getValueAtPosition, isInGrid, movePosition, Position } from "../grid"
+import { describe } from 'node:test'
+import {
+  findPositionsInGrid,
+  getValueAtPosition,
+  isInGrid,
+  movePosition,
+  Position,
+} from '../grid'
 
 describe('isInGrid', () => {
   const testGrids = [
@@ -7,10 +13,14 @@ describe('isInGrid', () => {
       grid: [['']],
     },
     {
-      grid: [[null, null], [null, null]]
-    }, {
-      grid: new Array(100).fill([0])
-    }
+      grid: [
+        [null, null],
+        [null, null],
+      ],
+    },
+    {
+      grid: new Array(100).fill([0]),
+    },
   ]
 
   it('should return true if position is greater than 0 but less than grid bounds', () => {
@@ -52,9 +62,10 @@ describe('movePosition', () => {
 })
 
 describe('getValueAtPosition', () => {
-  const testGrid = new Array(2).fill(0)
+  const testGrid = new Array(2)
+    .fill(0)
     .map(() => ['', null, 0, [1, 2]])
-    .map((x, i) => i % 2 === 1 ? x.reverse() : x)
+    .map((x, i) => (i % 2 === 1 ? x.reverse() : x))
 
   it('should return the value at the given position in the grid if present', () => {
     expect(getValueAtPosition(testGrid, [0, 0])).toBe('')
@@ -80,12 +91,19 @@ describe('findPositionsInGrid', () => {
   it('should return all positions in grid where value matches predicate', () => {
     // predicate -> isEven
     expect(findPositionsInGrid(testGrid, x => x % 2 === 0)).toEqual([
-      [0, 0], [0, 2], [1, 0], [1, 2], [2, 0], [2, 2],
+      [0, 0],
+      [0, 2],
+      [1, 0],
+      [1, 2],
+      [2, 0],
+      [2, 2],
     ])
 
     // predicate -> isOdd
     expect(findPositionsInGrid(testGrid, x => x % 2 === 1)).toEqual([
-      [0, 1], [1, 1], [2, 1]
+      [0, 1],
+      [1, 1],
+      [2, 1],
     ])
   })
 

@@ -13,17 +13,15 @@ import data from './input'
 const extrapolate = (history: Array<number[]>, previous = false) =>
   history
     .map(line => line.at(previous ? 0 : -1))
-    .reduceRight((sum, value) => previous ? value - sum : sum + value, 0)
+    .reduceRight((sum, value) => (previous ? value - sum : sum + value), 0)
 
-const series = data
-  .split('\n')
-  .map(line => line.split(' ').map(Number))
+const series = data.split('\n').map(line => line.split(' ').map(Number))
 
 // Part 1
 let predictions: number[] = []
 for (const serie of series) {
-  const history: Array<number[]> = [];
-  let current = [...serie];
+  const history: Array<number[]> = []
+  let current = [...serie]
   while (current.some(x => x !== 0)) {
     history.push(current)
     let differences: number[] = []
@@ -39,17 +37,14 @@ for (const serie of series) {
 let sum = predictions.reduce((sum, value) => sum + value, 0)
 console.log(`Part 1: ${sum}`)
 
-
 // Part 2
 const extrapolatePrevious = (history: Array<number[]>) =>
-  history
-    .map(line => line.at(0))
-    .reduceRight((sum, value) => value - sum, 0)
+  history.map(line => line.at(0)).reduceRight((sum, value) => value - sum, 0)
 
 predictions = []
 for (const serie of series) {
-  const history: Array<number[]> = [];
-  let current = [...serie];
+  const history: Array<number[]> = []
+  let current = [...serie]
   while (current.some(x => x !== 0)) {
     history.push(current)
     let differences: number[] = []

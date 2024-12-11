@@ -1,5 +1,5 @@
 /**
- * Advent of Code 2023 
+ * Advent of Code 2023
  * Day 01
  * https://adventofcode.com/2023/day/1
  */
@@ -9,18 +9,13 @@ import data from './input'
 const extractCalibrationValue = (digits: string[]) =>
   parseInt(`${digits.at(0)}${digits.at(-1)}`)
 
-
 const lines = data.split('\n')
 
 // Part 1
 const answer1 = lines
-  .map(line =>
-    extractCalibrationValue(
-      line.replace(/\D/g, '').split('')
-    ))
+  .map(line => extractCalibrationValue(line.replace(/\D/g, '').split('')))
   .reduce((acc, value) => acc + value, 0)
 console.log(`Part 1: ${answer1}`)
-
 
 // Part 2
 const extractDigits = (line: string) =>

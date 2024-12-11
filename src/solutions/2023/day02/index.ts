@@ -1,5 +1,5 @@
 /**
- * Advent of Code 2023 
+ * Advent of Code 2023
  * Day 02
  * https://adventofcode.com/2023/day/2
  */
@@ -14,7 +14,7 @@ const COLORS = {
 const CUBES_NUMBERS = {
   [COLORS.RED]: 12,
   [COLORS.GREEN]: 13,
-  [COLORS.BLUE]: 14
+  [COLORS.BLUE]: 14,
 }
 
 const lines = data.split('\n')
@@ -30,8 +30,7 @@ lines.forEach((line, index) => {
     for (const cube of cubes) {
       const [_, amount, color] = [...cube.matchAll(/(\d+) (\w+)/g)][0]
 
-      if (parseInt(amount) > CUBES_NUMBERS[color])
-        return
+      if (parseInt(amount) > CUBES_NUMBERS[color]) return
     }
   }
 
@@ -40,7 +39,7 @@ lines.forEach((line, index) => {
 console.log(`Part 1: ${sum}`)
 
 // Part 2
-let power = 0;
+let power = 0
 lines.forEach(line => {
   const results = line.split(': ')[1].split('; ')
 

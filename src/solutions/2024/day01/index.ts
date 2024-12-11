@@ -6,12 +6,13 @@
 import zip from 'lodash-es/zip'
 import data from './input'
 
-const [list1, list2] = data
-  .split(/\s+/)
-  .reduce((lists, value, index) => {
+const [list1, list2] = data.split(/\s+/).reduce(
+  (lists, value, index) => {
     lists[index % 2].push(parseInt(value))
     return lists
-  }, [[], []] as [number[], number[]])
+  },
+  [[], []] as [number[], number[]],
+)
 
 // Part 1
 const distance = zip(list1.sort(), list2.sort())
@@ -19,7 +20,6 @@ const distance = zip(list1.sort(), list2.sort())
   .reduce((total, distance) => total + distance, 0)
 
 console.log(`Part 1: ${distance}`)
-
 
 // Part 2
 const score = list1

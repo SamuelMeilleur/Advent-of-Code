@@ -32,7 +32,7 @@
 const CELLS = {
   START: 'S',
   GROUND: '.',
-  IN_LOOP: 'I'
+  IN_LOOP: 'I',
 }
 
 enum Directions {
@@ -51,15 +51,15 @@ const MOVES: Record<Directions, Move> = {
 }
 
 const pipes = ['|', '-', 'L', 'J', '7', 'F'] as const
-type Pipe = typeof pipes[number]
+type Pipe = (typeof pipes)[number]
 
 const PIPES_MOVES: Record<Pipe, Move[]> = {
   '|': [MOVES.NORTH, MOVES.SOUTH],
   '-': [MOVES.WEST, MOVES.EAST],
-  'L': [MOVES.NORTH, MOVES.EAST],
-  'J': [MOVES.NORTH, MOVES.WEST],
+  L: [MOVES.NORTH, MOVES.EAST],
+  J: [MOVES.NORTH, MOVES.WEST],
   '7': [MOVES.SOUTH, MOVES.WEST],
-  'F': [MOVES.SOUTH, MOVES.EAST],
+  F: [MOVES.SOUTH, MOVES.EAST],
 }
 
 type Position = [number, number]
@@ -75,28 +75,30 @@ const getNextPositions = (position: Position, grid: string[][]) => {
 }
 
 const isValidStartPipe = (pipe: Position, grid: string[][]) =>
-  getNextPositions(pipe, grid)
-    .some(([x, y]) => grid[x][y] === CELLS.START)
+  getNextPositions(pipe, grid).some(([x, y]) => grid[x][y] === CELLS.START)
 
 const isOutOfBounds = ([x, y]: Position, grid: string[][]) =>
-  (x < 0 || y < 0 || x >= grid.length || y >= grid[0].length)
+  x < 0 || y < 0 || x >= grid.length || y >= grid[0].length
 
 const grid = data.split('\n').map(line => line.split(''))
-const start = grid.map((row, i) => {
-  const col = row.findIndex((cell) => cell === CELLS.START)
-  return col !== -1 ? [i, col] : null
-}).find(Boolean) as Position
+const start = grid
+  .map((row, i) => {
+    const col = row.findIndex(cell => cell === CELLS.START)
+    return col !== -1 ? [i, col] : null
+  })
+  .find(Boolean) as Position
 
-// Part 1 
+// Part 1
 let path: Position[]
 const startingPipes = Object.values(MOVES)
   .map(move => makeMove(start, move))
-  .filter(([x, y]) => !isOutOfBounds([x, y], grid) && pipes.includes(grid[x][y] as Pipe))
+  .filter(
+    ([x, y]) =>
+      !isOutOfBounds([x, y], grid) && pipes.includes(grid[x][y] as Pipe),
+  )
 
 for (const pipe of startingPipes) {
-  if (!isValidStartPipe(pipe, grid)) {
-    continue
-  }
+  if (!isValidStartPipe(pipe, grid)) continue
 
   let [x, y] = pipe
   let prev = start
@@ -106,7 +108,7 @@ for (const pipe of startingPipes) {
     const next = prev.toString() !== m1.toString() ? m1 : m2
 
     prev = [x, y] as Position
-    [x, y] = next
+    ;[x, y] = next
     path.push(next)
 
     if (isOutOfBounds(next, grid)) {
@@ -119,7 +121,6 @@ for (const pipe of startingPipes) {
   }
 }
 console.log(`Part 1: ${path.length / 2}`)
-
 
 // Part 2
 const filterPipes = (pipes: Pipe[], direction: Directions) => {
@@ -135,7 +136,6 @@ const filterPipes = (pipes: Pipe[], direction: Directions) => {
       return pipes
   }
 }
-
 
 const isInLoop = (position: Position, grid: string[][]) => {
   let isIn = false
@@ -156,7 +156,7 @@ const isInLoop = (position: Position, grid: string[][]) => {
         seenPipes.push(grid[x][y] as Pipe)
       }
 
-      [x, y] = makeMove([x, y], move)
+      ;[x, y] = makeMove([x, y], move)
     }
 
     seenPipes = filterPipes(seenPipes, direction as Directions)
@@ -181,9 +181,7 @@ for (var i = 0; i < grid.length; i++) {
 
 for (var i = 0; i < grid.length; i++) {
   for (var j = 0; j < grid[0].length; j++) {
-    if (pipes.includes(grid[i][j] as Pipe)) {
-      continue
-    }
+    if (pipes.includes(grid[i][j] as Pipe)) continue
     if (isInLoop([i, j], grid)) {
       grid[i][j] = CELLS.IN_LOOP
     }

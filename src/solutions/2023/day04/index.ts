@@ -1,5 +1,5 @@
 /**
- * Advent of Code 2023 
+ * Advent of Code 2023
  * Day 04
  * https://adventofcode.com/2023/day/4
  */
@@ -12,7 +12,9 @@ const calculateWinningCount = (line: string) => {
     .map(side => new Set(side.split(/\s+/)))
 
   return [...myNumbers.keys()].reduce(
-    (count, number) => winningNumbers.has(number) ? count + 1 : count, 0)
+    (count, number) => (winningNumbers.has(number) ? count + 1 : count),
+    0,
+  )
 }
 
 const lines = data.split('\n')
@@ -22,18 +24,22 @@ let sum = 0
 lines.forEach(line => {
   const winningNumbersCount = calculateWinningCount(line)
   if (winningNumbersCount > 0) {
-    sum += 2 ** (winningNumbersCount - 1);
+    sum += 2 ** (winningNumbersCount - 1)
   }
 })
 console.log(`Part 1: ${sum}`)
 
-
 // Part 2
-const scratchcards = new Map<string, number>(Object.entries(Array(lines.length).fill(1)))
+const scratchcards = new Map<string, number>(
+  Object.entries(Array(lines.length).fill(1)),
+)
 lines.forEach((line, index) => {
   const winningNumbersCount = calculateWinningCount(line)
   for (var i = index + 1; i <= index + winningNumbersCount; i++) {
-    scratchcards.set(String(i), scratchcards.get(String(i)) + scratchcards.get(String(index)))
+    scratchcards.set(
+      String(i),
+      scratchcards.get(String(i)) + scratchcards.get(String(index)),
+    )
   }
 })
 

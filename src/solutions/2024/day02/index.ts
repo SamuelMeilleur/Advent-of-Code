@@ -18,23 +18,22 @@ const isReportSafe = (report: number[]) => {
     .slice(0, -1)
     .map(([level1, level2]) => level2 - level1)
 
-  return diffs.every(diff => diff >= MIN_DIFFERENCE && diff <= MAX_DIFFERENCE) ||
+  return (
+    diffs.every(diff => diff >= MIN_DIFFERENCE && diff <= MAX_DIFFERENCE) ||
     diffs.every(diff => diff >= -MAX_DIFFERENCE && diff <= -MIN_DIFFERENCE)
+  )
 }
 
 // Part 1
-let count = reports
-  .filter(isReportSafe).length
+let count = reports.filter(isReportSafe).length
 
 console.log(`Part 1: ${count}`)
 
-
 // Part 2
 count = reports
-  .map(report => report
-    .map((_, i, array) => [...array.slice(0, i), ...array.slice(i + 1)])
+  .map(report =>
+    report.map((_, i, array) => [...array.slice(0, i), ...array.slice(i + 1)]),
   )
-  .filter(reportList => reportList.some(isReportSafe))
-  .length
+  .filter(reportList => reportList.some(isReportSafe)).length
 
 console.log(`Part 2: ${count}`)

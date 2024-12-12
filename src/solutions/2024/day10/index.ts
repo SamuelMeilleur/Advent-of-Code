@@ -7,7 +7,7 @@ import {
   findPositionsInGrid,
   getValueAtPosition,
   movePosition,
-  ORTHOGONAL_DIRECTIONS,
+  Directions,
   type Position,
 } from '../../../utils/grid'
 import data from './input'
@@ -39,7 +39,7 @@ const getAccessibleSummits = (grid: number[][]) => {
 
   for (let height = SUMMIT - 1; height >= TRAILHEAD; height--) {
     for (const position of elevationMap.get(height)) {
-      for (const direction of ORTHOGONAL_DIRECTIONS) {
+      for (const direction of Object.values(Directions)) {
         const neighbourPosition = movePosition(position, direction)
         if (getValueAtPosition(grid, neighbourPosition) !== height + 1) continue
 

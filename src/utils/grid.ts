@@ -1,13 +1,14 @@
 export type Position = [number, number]
+export type Direction = [number, number]
 
 export const EMPTY = '.'
 
-export const ORTHOGONAL_DIRECTIONS = [
-  [-1, 0],
-  [0, 1],
-  [1, 0],
-  [0, -1],
-] as Position[]
+export const Directions = {
+  UP: [-1, 0] as Direction,
+  DOWN: [1, 0] as Direction,
+  LEFT: [0, -1] as Direction,
+  RIGHT: [0, 1] as Direction,
+}
 
 export const isInGrid = <T>(grid: T[][], position: Position) =>
   position[0] >= 0 &&
@@ -39,3 +40,6 @@ export const findPositionsInGrid = <T>(
     )
     .flat()
     .filter(position => position.length > 0) as Position[]
+
+export const isSamePosition = (positionA: Position, positionB: Position) =>
+  positionA[0] === positionB[0] && positionA[1] === positionB[1]

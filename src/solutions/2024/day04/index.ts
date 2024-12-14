@@ -4,18 +4,18 @@
  * https://adventofcode.com/2024/day/4
  */
 import zip from 'lodash-es/zip'
+import type { Grid } from '../../../utils/grid'
 import data from './input'
 
 const lines = data.split('\n')
-
 const letters = lines.map(line => line.split(''))
 
 // Part 1
-const getVerticalLines = (letters: string[][]) => {
+const getVerticalLines = (letters: Grid<string>) => {
   return zip(...letters).map(line => line.join(''))
 }
 
-const getDiagonals = (letters: string[][]) => {
+const getDiagonals = (letters: Grid<string>) => {
   const diagonals = []
   for (let i = 0; i < letters[0].length + letters.length; i++) {
     let diagonal1 = ''
@@ -49,10 +49,11 @@ count = 0
 for (let y = 1; y < letters.length - 1; y++) {
   for (let x = 1; x < letters[0].length - 1; x++) {
     if (letters[y][x] !== 'A') continue
-
-    const first = letters[y - 1][x - 1] + letters[y][x] + letters[y + 1][x + 1]
-    const second = letters[y + 1][x - 1] + letters[y][x] + letters[y - 1][x + 1]
-    if ([first, second].every(word => word.match(/(?=(MAS|SAM))/g))) {
+    const cross = [
+      letters[y - 1][x - 1] + letters[y][x] + letters[y + 1][x + 1],
+      letters[y + 1][x - 1] + letters[y][x] + letters[y - 1][x + 1],
+    ]
+    if (cross.every(word => word.match(/(MAS|SAM)/g))) {
       count += 1
     }
   }

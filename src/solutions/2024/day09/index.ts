@@ -5,29 +5,33 @@
  */
 import data from './input'
 
-const EMPTY = -1
+type Block = number[]
+type Disk = Block[]
 
-const diskBlocks = data
-  .split('')
-  .map(Number)
-  .map((value, index) =>
-    new Array<number>(value).fill(index % 2 === 0 ? index / 2 : EMPTY),
-  )
+type SmartBlock = {
+  id: number
+  start: number
+  length: number
+}
+type File = SmartBlock
+type Blank = SmartBlock
 
-// Part 1
-const fragmentDisk = (disk: number[]) => {
-  const condensed: typeof disk = []
-  let left = 0,
-    right = disk.length - 1
+const EMPTY = -1 as const
+
+const fragmentDisk = (disk: Disk) => {
+  const flattened = disk.flat()
+  const condensed: typeof flattened = []
+  let left = 0
+  let right = flattened.length - 1
   while (left <= right) {
-    if (disk[right] === EMPTY) {
+    if (flattened[right] === EMPTY) {
       right -= 1
       continue
     }
-    if (disk[left] !== EMPTY) {
-      condensed.push(disk[left])
+    if (flattened[left] !== EMPTY) {
+      condensed.push(flattened[left])
     } else {
-      condensed.push(disk[right])
+      condensed.push(flattened[right])
       right -= 1
     }
     left += 1
@@ -35,23 +39,9 @@ const fragmentDisk = (disk: number[]) => {
   return condensed
 }
 
-let checksum = fragmentDisk(diskBlocks.flat()).reduce(
-  (sum, value, index) => (sum += value * index),
-  0,
-)
-
-console.log(`Part 1: ${checksum}`)
-
-// Part 2
-interface Block {
-  id: number
-  start: number
-  length: number
-}
-
-const splitFilesAndBlanks = (blocks: Array<number[]>) => {
+const splitFilesAndBlanks = (disk: Disk) => {
   let position = 0
-  return blocks.reduce(
+  return disk.reduce<[File[], Blank[]]>(
     (acc, block, index) => {
       acc[index % 2].push({
         id: block[0] ?? EMPTY,
@@ -61,12 +51,12 @@ const splitFilesAndBlanks = (blocks: Array<number[]>) => {
       position += block.length
       return acc
     },
-    [[], []] as [Block[], Block[]],
+    [[], []],
   )
 }
 
-const condenseFiles = (blocks: Array<number[]>) => {
-  const [files, blanks] = splitFilesAndBlanks(blocks)
+const compressDisk = (disk: Disk) => {
+  const [files, blanks] = splitFilesAndBlanks(disk)
   for (const file of files.reverse()) {
     const blank = blanks.find(
       blank => blank.start < file.start && blank.length >= file.length,
@@ -80,11 +70,26 @@ const condenseFiles = (blocks: Array<number[]>) => {
   return files
 }
 
-checksum = condenseFiles(diskBlocks).reduce(
+const disk = data
+  .split('')
+  .map(Number)
+  .map(
+    (value, index) =>
+      new Array(value).fill(index % 2 === 0 ? index / 2 : EMPTY) as Block,
+  )
+
+// Part 1
+let checksum = fragmentDisk(disk).reduce(
+  (sum, value, index) => (sum += value * index),
+  0,
+)
+console.log(`Part 1: ${checksum}`)
+
+// Part 2
+checksum = compressDisk(disk).reduce(
   (sum, { id, start, length }) =>
     (sum +=
       (id * ((start + length - 1) * (start + length) - (start - 1) * start)) / 2),
   0,
 )
-
 console.log(`Part 2: ${checksum}`)

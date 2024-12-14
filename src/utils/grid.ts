@@ -1,14 +1,24 @@
-export type Position = [number, number]
-export type Direction = [number, number]
+export type Vector = [number, number]
+export type Position = Vector
+export type Grid<T> = T[][]
 
-export const EMPTY = '.'
-
-export const Directions = {
-  UP: [-1, 0] as Direction,
-  DOWN: [1, 0] as Direction,
-  LEFT: [0, -1] as Direction,
-  RIGHT: [0, 1] as Direction,
+export enum Direction {
+  Up,
+  Down,
+  Left,
+  Right,
 }
+export type DirectionName = keyof typeof Direction
+
+type Directions = {
+  [key in DirectionName]: Vector
+}
+export const DirectionVectors = {
+  Up: [-1, 0],
+  Down: [1, 0],
+  Left: [0, -1],
+  Right: [0, 1],
+} as Directions
 
 export const isInGrid = <T>(grid: T[][], position: Position) =>
   position[0] >= 0 &&

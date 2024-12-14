@@ -3,47 +3,51 @@
  * Day 06
  * https://adventofcode.com/2024/day/6
  */
-import { type Position, EMPTY, isInGrid, movePosition } from '../../../utils/grid'
+import {
+  type Position,
+  DirectionVectors,
+  getValueAtPosition,
+  type Grid,
+  isInGrid,
+  movePosition,
+  isSamePosition,
+} from '../../../utils/grid'
 import data from './input'
 
-type Direction = [1, 0] | [-1, 0] | [0, 1] | [0, -1]
+type PositionID = string
+type DirectionID = string
+const EMPTY = '.' as const
 const OBSTACLE = '#' as const
 
-const map = data.split('\n').map(line => line.split(''))
+const grid = data.split('\n').map(line => line.split(''))
 
 // Part 1
-const startPosition = map
+const startPosition = grid
   .flatMap((row, y) =>
     row.map((cell, x) => (cell !== OBSTACLE && cell !== EMPTY ? [y, x] : null)),
   )
   .find(Boolean) as Position
 
-const seenPositions = new Set<string>()
-let direction = [-1, 0] as Direction
+const seenPositions = new Set<PositionID>()
+let direction = DirectionVectors.Up
 let position = [...startPosition] as Position
-while (true) {
+while (isInGrid(grid, position)) {
   seenPositions.add(String(position))
-  const [y, x] = movePosition(position, direction)
-  if (!isInGrid(map, [y, x])) {
-    break
-  }
-
-  if (map[y][x] === OBSTACLE) {
+  const nextPosition = movePosition(position, direction)
+  if (getValueAtPosition(grid, nextPosition) === OBSTACLE)
     // turn right when meeting obstacle
-    direction = [direction[1], -direction[0]] as Direction
-  } else {
-    position = [y, x]
-  }
+    direction = [direction[1], -direction[0]]
+  else position = nextPosition
 }
 
 console.log(`Part 1: ${seenPositions.size}`)
 
 // Part 2
-const isLoop = (grid: string[][], start: Position, newObstacle: Position) => {
-  const seen = new Map<string, string[]>()
+const isLoop = (grid: Grid<string>, start: Position, newObstacle: Position) => {
+  const seen = new Map<PositionID, DirectionID[]>()
+  let direction = DirectionVectors.Up
   let position = [...start] as Position
-  let direction = [-1, 0] as Direction
-  while (true) {
+  while (isInGrid(grid, position)) {
     if (seen.get(String(position))?.includes(String(direction))) {
       return true
     }
@@ -51,27 +55,21 @@ const isLoop = (grid: string[][], start: Position, newObstacle: Position) => {
       String(position),
       (seen.get(String(position)) ?? []).concat(String(direction)),
     )
-
-    const [y, x] = movePosition(position, direction)
-    if (!isInGrid(map, [y, x])) {
-      return false
-    }
-
+    const nextPosition = movePosition(position, direction)
     if (
-      grid[y][x] === OBSTACLE ||
-      (y === newObstacle[0] && x === newObstacle[1])
-    ) {
-      direction = [direction[1], -direction[0]] as Direction
-    } else {
-      position = [y, x]
-    }
+      getValueAtPosition(grid, nextPosition) === OBSTACLE ||
+      isSamePosition(nextPosition, newObstacle)
+    )
+      direction = [direction[1], -direction[0]]
+    else position = nextPosition
   }
+  return false
 }
 
-const loopsCount = [...seenPositions.keys()]
+const loopsCount = Array.from(seenPositions.keys())
   .map(pos => pos.split(',').map(Number))
   .reduce(
-    (count, [y, x]) => (isLoop(map, startPosition, [y, x]) ? count + 1 : count),
+    (count, [y, x]) => (isLoop(grid, startPosition, [y, x]) ? count + 1 : count),
     0,
   )
 

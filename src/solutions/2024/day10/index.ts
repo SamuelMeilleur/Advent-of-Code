@@ -7,39 +7,39 @@ import {
   findPositionsInGrid,
   getValueAtPosition,
   movePosition,
-  Directions,
+  DirectionVectors,
   type Position,
+  Grid,
 } from '../../../utils/grid'
 import data from './input'
 
-const TRAILHEAD = 0
-const SUMMIT = 9
+type Elevation = number
+type PositionID = string
+type SummitID = string
 
-// returns a map of all positions at a same elevation (map-key)
-const computeElevationsMap = (grid: number[][]) =>
+const TRAILHEAD = 0 as const
+const SUMMIT = 9 as const
+
+const computeElevationsMap = (grid: Grid<Elevation>) =>
   grid
     .flatMap((line, i) =>
-      line.map((height, j) => [height, [i, j]] as [number, Position]),
+      line.map((height, j) => [height, [i, j]] as [Elevation, Position]),
     )
-    .reduce(
-      (map, [elevation, position]) =>
-        map.set(elevation, (map.get(elevation) ?? []).concat([position])),
-      new Map<number, Position[]>(),
-    )
+    .reduce<
+      Map<Elevation, Position[]>
+    >((map, [elevation, position]) => map.set(elevation, (map.get(elevation) ?? []).concat([position])), new Map())
 
-// returns list of accessible summits from given position (map-key)
-const getAccessibleSummits = (grid: number[][]) => {
-  const elevationMap = computeElevationsMap(grid)
-  const summits = elevationMap
+const getAccessibleSummits = (grid: Grid<Elevation>) => {
+  const positionsByElevation = computeElevationsMap(grid)
+  const summits = positionsByElevation
     .get(SUMMIT)
-    .reduce(
-      (map, trailend) => map.set(trailend.toString(), [trailend.toString()]),
-      new Map<string, string[]>(),
-    )
+    .reduce<
+      Map<PositionID, SummitID[]>
+    >((map, trailend) => map.set(trailend.toString(), [trailend.toString()]), new Map())
 
   for (let height = SUMMIT - 1; height >= TRAILHEAD; height--) {
-    for (const position of elevationMap.get(height)) {
-      for (const direction of Object.values(Directions)) {
+    for (const position of positionsByElevation.get(height)) {
+      for (const direction of Object.values(DirectionVectors)) {
         const neighbourPosition = movePosition(position, direction)
         if (getValueAtPosition(grid, neighbourPosition) !== height + 1) continue
 
@@ -56,8 +56,9 @@ const getAccessibleSummits = (grid: number[][]) => {
   return summits
 }
 
-const elevationGrid = data.split('\n').map(line => line.split('').map(Number))
-
+const elevationGrid: Grid<Elevation> = data
+  .split('\n')
+  .map(line => line.split('').map(Number))
 const summitsByPosition = getAccessibleSummits(elevationGrid)
 const trailheads = findPositionsInGrid(elevationGrid, x => x === TRAILHEAD)
 

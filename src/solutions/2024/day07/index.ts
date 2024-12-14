@@ -5,7 +5,7 @@
  */
 import data from './input'
 
-interface Equation {
+type Equation = {
   result: number
   operands: number[]
 }
@@ -41,9 +41,8 @@ const isValidEquation = (operations: Operation[]) => (equation: Equation) => {
   for (let n = 0; n < combinations; n++) {
     let current = result
     for (let i = 0; i < pairs; i++) {
-      const operation =
-        operations[Math.floor(n / operations.length ** i) % operations.length]
-      current = reverseOperation(current, operands.at(-(i + 1)), operation)
+      const operation = Math.floor(n / operations.length ** i) % operations.length
+      current = reverseOperation(current, operands.at(-1 - i), operation)
       if (!Number.isInteger(current) || current < 0) break
     }
     if (current === operands[0]) {

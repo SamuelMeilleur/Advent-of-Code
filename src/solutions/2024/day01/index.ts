@@ -6,12 +6,12 @@
 import zip from 'lodash-es/zip'
 import data from './input'
 
-const [list1, list2] = data.split(/\s+/).reduce(
+const [list1, list2] = data.split(/\s+/).reduce<[number[], number[]]>(
   (lists, value, index) => {
     lists[index % 2].push(parseInt(value))
     return lists
   },
-  [[], []] as [number[], number[]],
+  [[], []],
 )
 
 // Part 1

@@ -6,14 +6,16 @@
 import zip from 'lodash-es/zip'
 import data from './input'
 
+type Report = number[]
+
 const MAX_DIFFERENCE = 3
 const MIN_DIFFERENCE = 1
 
 const reports = data
   .split('\n')
-  .map(line => line.split(/\s+/).map(value => Number(value)))
+  .map(line => line.split(/\s+/).map(Number)) as Report[]
 
-const isReportSafe = (report: number[]) => {
+const isReportSafe = (report: Report) => {
   const diffs = zip(report, report.slice(1))
     .slice(0, -1)
     .map(([level1, level2]) => level2 - level1)

@@ -5,21 +5,26 @@
  */
 import data from './input'
 
-const isValidUpdate = (pages: number[], rules: Record<number, number[]>) =>
-  pages.every(
-    (page, index) =>
-      rules[page] == null ||
-      pages.slice(index + 1).every(nextPage => !rules[page].includes(nextPage)),
+type Page = number
+type Update = Page[]
+type Rule = [Page, Page]
+
+const isValidUpdate = (update: Update, rules: Record<Page, Page[]>) =>
+  update.every((page, index) =>
+    update.slice(index + 1).every(nextPage => !rules[page]?.includes(nextPage)),
   )
 
 const [rules, updates] = data
   .split(/\n{2}/)
-  .map(input => input.split('\n').map(line => line.split(/(?:\||,)/).map(Number)))
+  .map(input =>
+    input.split('\n').map(line => line.split(/(?:\||,)/).map(Number)),
+  ) as [Rule[], Update[]]
 
-const priorPagesMapping: Record<number, number[]> = rules.reduce(
-  (map, [precedingPage, page]) => ({
-    ...map,
-    [page]: map[page]?.concat(precedingPage) ?? [precedingPage],
+// for a given page, a list of pages that must come before it
+const priorPagesMapping = rules.reduce<Record<Page, Page[]>>(
+  (mapping, [precedingPage, page]) => ({
+    ...mapping,
+    [page]: (mapping[page] ?? []).concat(precedingPage),
   }),
   {},
 )

@@ -1,10 +1,13 @@
 import { describe } from 'node:test'
 import {
+  copyGrid,
   findPositionsInGrid,
   getValueAtPosition,
+  type Grid,
   isInGrid,
+  isSamePosition,
   movePosition,
-  Position,
+  type Position,
 } from '../grid'
 
 describe('isInGrid', () => {
@@ -86,7 +89,7 @@ describe('getValueAtPosition', () => {
 })
 
 describe('findPositionsInGrid', () => {
-  const testGrid = new Array(3).fill([0, 1, 2]) as number[][]
+  const testGrid = new Array(3).fill([0, 1, 2]) as Grid<number>
 
   it('should return all positions in grid where value matches predicate', () => {
     // predicate -> isEven
@@ -112,6 +115,39 @@ describe('findPositionsInGrid', () => {
     expect(findPositionsInGrid(testGrid, x => x === 3)).toEqual([])
 
     // empty grid
-    expect(findPositionsInGrid([] as number[][], x => x % 2 === 0)).toEqual([])
+    expect(findPositionsInGrid([] as Grid<number>, x => x % 2 === 0)).toEqual([])
+  })
+})
+
+describe('isSamePosition', () => {
+  it('return true if both positions are the same', () => {
+    expect(isSamePosition([0, 0], [0, 0])).toBe(true)
+    expect(isSamePosition([-10, -80], [-10, -80])).toBe(true)
+    expect(isSamePosition([100, 90], [100, 90])).toBe(true)
+  })
+
+  it('should return false if different', () => {
+    expect(isSamePosition([0, 0], [0.0001, 0])).toBe(false)
+    expect(isSamePosition([-10, -80], [-10, -81])).toBe(false)
+    expect(isSamePosition([100, 90], [0, 0])).toBe(false)
+  })
+})
+
+describe('copyGrid', () => {
+  const testGrid = new Array<number[]>(3)
+    .fill([1, 2, 3])
+    .map((row, index) => row.map(x => x * (index + 1)))
+
+  it('should return a new grid with the same rows (deep copy)', () => {
+    const copy = copyGrid(testGrid)
+    expect(copy).toEqual([
+      [1, 2, 3],
+      [2, 4, 6],
+      [3, 6, 9],
+    ])
+
+    testGrid[0][0] = null
+    expect(copy[0][0]).not.toBeNull()
+    expect(copy[0][0]).toBe(1)
   })
 })

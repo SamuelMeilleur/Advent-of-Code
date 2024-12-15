@@ -89,14 +89,14 @@ const getGrid = (robots: Robot[], dimensions: Dimensions) => {
 }
 
 const findTree = (robots: Robot[], dimensions: Dimensions) => {
-  let time = 0
-
   type SafetyFactor = number
   type Time = number
+
+  let time = 0
   let record: [Time, SafetyFactor] = [time, Infinity]
   let grid: Grid<string>
   while (true) {
-    if (time > 10000) break
+    if (time > dimensions.width * dimensions.height) break
     time += 1
     robots = moveRobots(robots, dimensions)
 
@@ -129,11 +129,11 @@ const start = data
   })) as Robot[]
 
 // Part 1
-const robots = moveRobots([...start], DIMENSIONS, 100)
+const robots = moveRobots(start.slice(), DIMENSIONS, 100)
 const safetyFactor = getSafetyFactor(robots, DIMENSIONS)
 
 // Part 2
-const { time, grid } = findTree([...start], DIMENSIONS)
+const { time, grid } = findTree(start.slice(0), DIMENSIONS)
 
 console.log(grid.map(line => line.join('')).join('\n'), '\n\n')
 

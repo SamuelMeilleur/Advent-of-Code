@@ -30,7 +30,7 @@ const startPosition = grid
 
 const seenPositions = new Set<PositionID>()
 let direction = DirectionVectors.Up
-let position = [...startPosition] as Position
+let position = startPosition.slice() as Position
 while (isInGrid(grid, position)) {
   seenPositions.add(String(position))
   const nextPosition = movePosition(position, direction)
@@ -46,7 +46,7 @@ console.log(`Part 1: ${seenPositions.size}`)
 const isLoop = (grid: Grid<string>, start: Position, newObstacle: Position) => {
   const seen = new Map<PositionID, DirectionID[]>()
   let direction = DirectionVectors.Up
-  let position = [...start] as Position
+  let position = start.slice() as Position
   while (isInGrid(grid, position)) {
     if (seen.get(String(position))?.includes(String(direction))) {
       return true

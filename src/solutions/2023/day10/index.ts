@@ -56,10 +56,10 @@ type Pipe = (typeof pipes)[number]
 const PIPES_MOVES: Record<Pipe, Move[]> = {
   '|': [MOVES.NORTH, MOVES.SOUTH],
   '-': [MOVES.WEST, MOVES.EAST],
-  L: [MOVES.NORTH, MOVES.EAST],
-  J: [MOVES.NORTH, MOVES.WEST],
+  'L': [MOVES.NORTH, MOVES.EAST],
+  'J': [MOVES.NORTH, MOVES.WEST],
   '7': [MOVES.SOUTH, MOVES.WEST],
-  F: [MOVES.SOUTH, MOVES.EAST],
+  'F': [MOVES.SOUTH, MOVES.EAST],
 }
 
 type Position = [number, number]

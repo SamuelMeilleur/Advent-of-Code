@@ -3,10 +3,10 @@ export type Position = Vector
 export type Grid<T> = T[][]
 
 export enum Direction {
-  Up,
-  Down,
-  Left,
-  Right,
+  Up = 'Up',
+  Down = 'Down',
+  Left = 'Left',
+  Right = 'Right',
 }
 export type DirectionName = keyof typeof Direction
 
@@ -35,24 +35,15 @@ export const getValueAtPosition = <T>(grid: Grid<T>, position: Position) =>
 export const findPositionsInGrid = <T>(
   grid: Grid<T>,
   predicate: (arg0: T) => boolean,
-) =>
-  grid
-    .reduce(
-      (positions, line, i) => [
-        ...positions,
-        line.reduce(
-          (matches, value, j) =>
-            predicate(value) ? [...matches, [i, j]] : matches,
-          [],
-        ),
-      ],
-      [] as Position[],
-    )
-    .flat()
-    .filter(position => position.length > 0) as Position[]
+): Position[] =>
+  grid.flatMap((row, i) =>
+    row
+      .map((value, j) => (predicate(value) ? ([i, j] as Position) : null))
+      .filter(Boolean),
+  )
 
 export const isSamePosition = (positionA: Position, positionB: Position) =>
-  positionA[0] === positionB[0] && positionA[1] === positionB[1]
+  positionA?.[0] === positionB?.[0] && positionA?.[1] === positionB?.[1]
 
 export const copyGrid = <T>(grid: Grid<T>): Grid<T> =>
   grid.map(row => row.slice())

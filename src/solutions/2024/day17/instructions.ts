@@ -1,73 +1,61 @@
-import type { Pointer, Registers } from './index'
+import { Instructions, type Pointer, type Registers } from './types'
 
-type Operand = number
-
-export enum Instructions {
-  adv,
-  bxl,
-  bst,
-  jnz,
-  bxc,
-  out,
-  bdv,
-  cdv,
+enum Registry {
+  A = 0,
+  B = 1,
+  C = 2,
 }
 
-const getComboOperand = (operand: Operand, registers: Registers) => {
+const getComboOperand = (operand: number, registers: Registers) => {
+  if (operand < 4) return operand
   switch (operand) {
-    case 0:
-    case 1:
-    case 2:
-    case 3:
-      return operand
     case 4:
-      return registers[0]
+      return registers[Registry.A]
     case 5:
-      return registers[1]
+      return registers[Registry.B]
     case 6:
-      return registers[2]
+      return registers[Registry.C]
     case 7:
     default:
       throw Error('invalid operand combo')
   }
 }
 
-const division = (operand: Operand, registers: Registers) =>
-  Math.floor(registers[0] / 2 ** getComboOperand(operand, registers))
+const division = (operand: number, registers: Registers) =>
+  registers[Registry.A] >> BigInt(getComboOperand(operand, registers))
 
 export const executeInstruction = (
   pointer: Pointer,
   instruction: Instructions,
-  operand: Operand,
+  operand: number,
   registers: Registers,
   outputs: number[],
 ) => {
   switch (instruction) {
     case Instructions.adv:
-      registers[0] = division(operand, registers)
+      registers[Registry.A] = division(operand, registers)
       break
     case Instructions.bxl:
-      registers[1] ^= operand
+      registers[Registry.B] ^= BigInt(operand)
       break
     case Instructions.bst:
-      registers[1] = getComboOperand(operand, registers) % 8
+      registers[Registry.B] = BigInt(getComboOperand(operand, registers)) % 8n
       break
     case Instructions.jnz:
-      if (registers[0] !== 0) return operand
+      if (registers[Registry.A] !== 0n) return operand
       break
     case Instructions.bxc:
-      registers[1] ^= registers[2]
+      registers[Registry.B] ^= registers[Registry.C]
       break
     case Instructions.out:
-      outputs.push(getComboOperand(operand, registers) % 8)
+      outputs.push(Number(BigInt(getComboOperand(operand, registers)) % 8n))
       break
     case Instructions.bdv:
-      registers[1] = division(operand, registers)
+      registers[Registry.B] = division(operand, registers)
       break
     case Instructions.cdv:
-      registers[2] = division(operand, registers)
+      registers[Registry.C] = division(operand, registers)
       break
   }
-
   return pointer + 2
 }

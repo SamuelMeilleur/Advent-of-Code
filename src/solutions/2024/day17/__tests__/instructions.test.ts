@@ -39,6 +39,7 @@ describe('instructions', () => {
       expect(registers).toEqual([48n, 3n, 0n])
 
       registers = [24n, 12n, 1n]
+
       executeInstruction(2, Instructions.bst, 5, registers, [])
       expect(registers).toEqual([24n, 4n, 1n])
     })
@@ -64,11 +65,11 @@ describe('instructions', () => {
     it('should execute opcode bxc', () => {
       let registers = [0n, 8n, 3n] as Registers
       executeInstruction(0, Instructions.bxc, Math.random(), registers, [])
-      expect(registers).toEqual([0, 11, 3])
+      expect(registers).toEqual([0n, 11n, 3n])
 
       registers = [0n, 8n, 15n] as Registers
       executeInstruction(0, Instructions.bxc, Math.random(), registers, [])
-      expect(registers).toEqual([0, 7, 15])
+      expect(registers).toEqual([0n, 7n, 15n])
     })
 
     it('should execute opcode out', () => {
@@ -115,6 +116,12 @@ describe('instructions', () => {
       registers = [49n, 1n, 0n] as Registers
       executeInstruction(0, Instructions.cdv, 2, registers, [])
       expect(registers).toEqual([49n, 1n, 12n])
+    })
+
+    it('should throw error with combo operand 7', () => {
+      expect(() =>
+        executeInstruction(0, Instructions.adv, 7, [0n, 0n, 0n], []),
+      ).toThrow(Error)
     })
   })
 })

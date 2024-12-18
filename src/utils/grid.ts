@@ -3,10 +3,10 @@ export type Position = Vector
 export type Grid<T> = T[][]
 
 export enum Direction {
-  Up = 'Up',
-  Down = 'Down',
-  Left = 'Left',
-  Right = 'Right',
+  Up,
+  Down,
+  Left,
+  Right,
 }
 export type DirectionName = keyof typeof Direction
 

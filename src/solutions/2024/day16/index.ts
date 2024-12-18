@@ -49,7 +49,7 @@ const getNextNodes = (current: Node) => {
       distance: distance + 1000,
     }))
     .concat({
-      position: movePosition(position, DirectionVectors[direction]),
+      position: movePosition(position, DirectionVectors[Direction[direction]]),
       direction: direction,
       distance: distance + 1,
     })

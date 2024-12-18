@@ -188,5 +188,5 @@ for (var i = 0; i < grid.length; i++) {
   }
 }
 
-const output = grid.reduce((acc, line) => acc + line.join(' ') + '\n', '')
+const output = grid.reduce<string>((acc, line) => acc + line.join(' ') + '\n', '')
 console.log(output)

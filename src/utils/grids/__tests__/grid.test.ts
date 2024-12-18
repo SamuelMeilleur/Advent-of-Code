@@ -8,7 +8,7 @@ import {
   isSamePosition,
   movePosition,
   type Position,
-} from '../grid'
+} from '../index'
 
 describe('isInGrid', () => {
   const testGrids = [
@@ -47,10 +47,8 @@ describe('isInGrid', () => {
     })
   })
 
-  it('should return false if grid is null', () => {
-    expect(isInGrid(null, [0, 0])).toBe(false)
-    expect(isInGrid(undefined, [0, 0])).toBe(false)
-    expect(isInGrid([null, null], [0, 0])).toBe(false)
+  it('should return false if grid is empty', () => {
+    expect(isInGrid([], [0, 0])).toBe(false)
   })
 })
 
@@ -134,9 +132,9 @@ describe('isSamePosition', () => {
 })
 
 describe('copyGrid', () => {
-  const testGrid = new Array<number[]>(3)
+  const testGrid: Grid<number | null> = new Array(3)
     .fill([1, 2, 3])
-    .map((row, index) => row.map(x => x * (index + 1)))
+    .map((row, index) => row.map((x: number) => x * (index + 1)))
 
   it('should return a new grid with the same rows (deep copy)', () => {
     const copy = copyGrid(testGrid)

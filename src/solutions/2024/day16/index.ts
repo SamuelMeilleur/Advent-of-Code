@@ -3,15 +3,17 @@
  * Day 16
  * https://adventofcode.com/2024/day/16
  */
+
 import {
+  Direction,
+  type DirectionName,
+  DirectionVectors,
   findPositionsInGrid,
   getValueAtPosition,
-  Direction,
-  type Position,
   type Grid,
-  DirectionVectors,
   movePosition,
-} from '../../../utils/grid'
+  type Position,
+} from '../../../utils/grids'
 import data from './input'
 
 type Distance = number
@@ -49,7 +51,10 @@ const getNextNodes = (current: Node) => {
       distance: distance + 1000,
     }))
     .concat({
-      position: movePosition(position, DirectionVectors[Direction[direction]]),
+      position: movePosition(
+        position,
+        DirectionVectors[Direction[direction] as DirectionName],
+      ),
       direction: direction,
       distance: distance + 1,
     })
@@ -106,7 +111,7 @@ const findPath = (grid: Grid<string>, start: Position) => {
     updateNodesMap(nextNodes, unvisited)
   }
 
-  return null
+  return undefined
 }
 
 const grid = data.split('\n').map(row => row.split(''))
@@ -114,10 +119,11 @@ const grid = data.split('\n').map(row => row.split(''))
 // Part 1
 const start = findPositionsInGrid(grid, x => x === START).flat() as Position
 const pathNode = findPath(grid, start)
-console.log(`Part 1: ${pathNode.distance}`)
+console.log(`Part 1: ${pathNode?.distance}`)
 
 // Part 2
-const buildPaths = (node: Node): Path[] => {
+const buildPaths = (node?: Node): Path[] => {
+  if (node == null) return []
   const position = String(node.position)
   if (node.prevs.length === 0) return [[position]]
 

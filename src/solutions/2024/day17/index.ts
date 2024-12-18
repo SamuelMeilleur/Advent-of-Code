@@ -36,7 +36,7 @@ const output = executeProgram(program, registers)
 console.log(`Part 1: ${output}`)
 
 // Part 2
-const reverseProgram = (program: Program, previousA = 0n): bigint => {
+const reverseProgram = (program: Program, previousA = 0n): bigint | null => {
   for (let n = 0n; n < 8n; n++) {
     const guessRegisterA = (previousA << 3n) + n
     const output = executeProgram(program, [guessRegisterA, 0n, 0n])

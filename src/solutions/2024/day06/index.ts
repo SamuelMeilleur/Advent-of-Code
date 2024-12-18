@@ -11,7 +11,7 @@ import {
   isInGrid,
   movePosition,
   isSamePosition,
-} from '../../../utils/grid'
+} from '../../../utils/grids'
 import data from './input'
 
 type PositionID = string

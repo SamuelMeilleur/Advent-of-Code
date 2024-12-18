@@ -15,7 +15,7 @@ const [list1, list2] = data.split(/\s+/).reduce<[number[], number[]]>(
 )
 
 // Part 1
-const distance = zip(list1.sort(), list2.sort())
+const distance = (zip(list1.sort(), list2.sort()) as [number, number][])
   .map(([value1, value2]) => Math.abs(value1 - value2))
   .reduce((total, distance) => total + distance, 0)
 

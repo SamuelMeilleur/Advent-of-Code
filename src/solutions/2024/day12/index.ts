@@ -3,7 +3,7 @@
  * Day 12
  * https://adventofcode.com/2024/day/12
  */
-import { Grid } from '../../../utils/grid'
+import type { Grid } from '../../../utils/grids'
 import data from './input'
 import { buildZone, type Zone } from './zone'
 
@@ -14,7 +14,7 @@ const generateZones = (grid: Grid<string>): Zone[] => {
   return grid.reduce<Zone[]>(
     (gridZones, row, i) =>
       gridZones.concat(
-        row.reduce((zones, _, j) => {
+        row.reduce<Zone[]>((zones, _, j) => {
           if (seen.includes(String([i, j]))) return zones
           const zone = buildZone(grid, [i, j])
           seen.push(...zone.positions.map(String))

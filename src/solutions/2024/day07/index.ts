@@ -42,7 +42,11 @@ const isValidEquation = (operations: Operation[]) => (equation: Equation) => {
     let current = result
     for (let i = 0; i < pairs; i++) {
       const operation = Math.floor(n / operations.length ** i) % operations.length
-      current = reverseOperation(current, operands.at(-1 - i), operation)
+      current = reverseOperation(
+        current,
+        operands.at(-1 - i) as number,
+        operation,
+      )
       if (!Number.isInteger(current) || current < 0) break
     }
     if (current === operands[0]) {

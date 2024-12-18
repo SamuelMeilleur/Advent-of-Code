@@ -4,13 +4,14 @@
  * https://adventofcode.com/2024/day/10
  */
 import {
+  DirectionVectors,
   findPositionsInGrid,
   getValueAtPosition,
+  type Grid,
   movePosition,
-  DirectionVectors,
   type Position,
-  Grid,
-} from '../../../utils/grid'
+  type Vector,
+} from '../../../utils/grids'
 import data from './input'
 
 type Elevation = number
@@ -31,14 +32,15 @@ const computeElevationsMap = (grid: Grid<Elevation>) =>
 
 const getAccessibleSummits = (grid: Grid<Elevation>) => {
   const positionsByElevation = computeElevationsMap(grid)
-  const summits = positionsByElevation
-    .get(SUMMIT)
-    .reduce<
-      Map<PositionID, SummitID[]>
-    >((map, trailend) => map.set(trailend.toString(), [trailend.toString()]), new Map())
+  const summits = (positionsByElevation.get(SUMMIT) as Vector[]).reduce<
+    Map<PositionID, SummitID[]>
+  >(
+    (map, trailend) => map.set(trailend.toString(), [trailend.toString()]),
+    new Map(),
+  )
 
   for (let height = SUMMIT - 1; height >= TRAILHEAD; height--) {
-    for (const position of positionsByElevation.get(height)) {
+    for (const position of positionsByElevation.get(height) as Vector[]) {
       for (const direction of Object.values(DirectionVectors)) {
         const neighbourPosition = movePosition(position, direction)
         if (getValueAtPosition(grid, neighbourPosition) !== height + 1) continue
@@ -73,6 +75,6 @@ console.log(`Part 1: ${score}`)
 // Part 2
 score = trailheads
   .map(trailhead => summitsByPosition.get(trailhead.toString())?.length)
-  .reduce((sum, value) => sum + value, 0)
+  .reduce<number>((sum, value) => sum + (value ?? 0), 0)
 
 console.log(`Part 2: ${score}`)

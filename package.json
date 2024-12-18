@@ -5,6 +5,7 @@
   "scripts": {
     "start": "bash ./scripts/start.sh",
     "clean": "rm -rf node_modules",
+    "typecheck": "yarn tsc --noEmit",
     "test": "jest --watch --coverage"
   },
   "author": "Samuel Meilleur",

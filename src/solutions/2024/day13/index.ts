@@ -3,7 +3,7 @@
  * Day 13
  * https://adventofcode.com/2024/day/13
  */
-import type { Vector, Position } from '../../../utils/grid'
+import type { Vector, Position } from '../../../utils/grids'
 import data from './input'
 
 type Movement = Vector
@@ -56,7 +56,7 @@ const ERROR = 10000000000000
 cost = machines
   .map(machine => ({
     ...machine,
-    target: machine.target.map(x => x + ERROR),
+    target: machine.target.map(x => x + ERROR) as Vector,
   }))
   .map(getMachineCost)
   .reduce((sum, cost) => sum + cost, 0)

@@ -3,7 +3,7 @@
  * Day 08
  * https://adventofcode.com/2024/day/8
  */
-import { type Grid, type Position, isInGrid } from '../../../utils/grid'
+import { type Grid, type Position, isInGrid } from '../../../utils/grids'
 import data from './input'
 
 type Frequency = string

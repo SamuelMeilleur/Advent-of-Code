@@ -1,18 +1,5 @@
-export type Vector = [number, number]
-export type Position = Vector
-export type Grid<T> = T[][]
+import type { Directions, Grid, Position } from './types'
 
-export enum Direction {
-  Up,
-  Down,
-  Left,
-  Right,
-}
-export type DirectionName = keyof typeof Direction
-
-type Directions = {
-  [key in DirectionName]: Vector
-}
 export const DirectionVectors = {
   Up: [-1, 0],
   Down: [1, 0],
@@ -36,10 +23,11 @@ export const findPositionsInGrid = <T>(
   grid: Grid<T>,
   predicate: (arg0: T) => boolean,
 ): Position[] =>
-  grid.flatMap((row, i) =>
-    row
-      .map((value, j) => (predicate(value) ? ([i, j] as Position) : null))
-      .filter(Boolean),
+  grid.flatMap(
+    (row, i) =>
+      row
+        .map((value, j) => (predicate(value) ? ([i, j] as Position) : null))
+        .filter(Boolean) as Position[],
   )
 
 export const isSamePosition = (positionA: Position, positionB: Position) =>

@@ -4,11 +4,11 @@
  * https://adventofcode.com/2  024/day/14
  */
 import {
-  Grid,
+  type Grid,
   movePosition,
   type Position,
   type Vector,
-} from '../../../utils/grid'
+} from '../../../utils/grids'
 import data from './input'
 
 type Dimensions = {
@@ -94,7 +94,7 @@ const findTree = (robots: Robot[], dimensions: Dimensions) => {
 
   let time = 0
   let record: [Time, SafetyFactor] = [time, Infinity]
-  let grid: Grid<string>
+  let grid: Grid<string> | null = null
   while (true) {
     if (time > dimensions.width * dimensions.height) break
     time += 1
@@ -119,7 +119,7 @@ const start = data
     line.split(' ').map(prop =>
       prop
         .match(/\w=(-?\d+),(-?\d+)/)
-        .slice(1, 3)
+        ?.slice(1, 3)
         .map(Number),
     ),
   )
@@ -135,7 +135,7 @@ const safetyFactor = getSafetyFactor(robots, DIMENSIONS)
 // Part 2
 const { time, grid } = findTree(start.slice(0), DIMENSIONS)
 
-console.log(grid.map(line => line.join('')).join('\n'), '\n\n')
+console.log(grid?.map(line => line.join('')).join('\n'), '\n\n')
 
 console.log(`Part 1: ${safetyFactor}`)
 console.log(`Part 2: ${time}`)

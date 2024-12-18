@@ -8,11 +8,11 @@ import {
   DirectionVectors,
   findPositionsInGrid,
   getValueAtPosition,
-  Grid,
+  type Grid,
   movePosition,
-  Position,
-  Vector,
-} from '../../../utils/grid'
+  type Position,
+  type Vector,
+} from '../../../utils/grids'
 import data from './input'
 
 type Direction = '<' | '>' | '^' | 'v'

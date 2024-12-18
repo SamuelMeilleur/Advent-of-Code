@@ -4,7 +4,7 @@
  * https://adventofcode.com/2024/day/4
  */
 import zip from 'lodash-es/zip'
-import type { Grid } from '../../../utils/grid'
+import type { Grid } from '../../../utils/grids'
 import data from './input'
 
 const lines = data.split('\n')

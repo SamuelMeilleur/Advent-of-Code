@@ -1,14 +1,15 @@
 import {
   Direction,
+  type DirectionName,
+  DirectionVectors,
   getValueAtPosition,
+  type Grid,
   isInGrid,
   isSamePosition,
   movePosition,
-  type DirectionName,
-  DirectionVectors,
   type Position,
-  type Grid,
-} from '../../../utils/grid'
+  type Vector,
+} from '../../../utils/grids'
 
 type Side = DirectionName
 type Edge = {
@@ -83,12 +84,12 @@ const buildZone = (grid: Grid<string>, start: Position): Zone => {
     perimeter: 0,
     sides: 0,
     positions: [],
-  }
+  } as Zone
 
   const edges: Edge[] = []
   const queue = [start]
   while (queue.length > 0) {
-    const position = queue.pop()
+    const position = queue.pop() as Vector
     zone.positions.push(position)
 
     const neighbors = Object.values(DirectionVectors)

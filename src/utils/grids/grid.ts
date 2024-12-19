@@ -23,12 +23,11 @@ export const findPositionsInGrid = <T>(
   grid: Grid<T>,
   predicate: (arg0: T) => boolean,
 ): Position[] =>
-  grid.flatMap(
-    (row, i) =>
-      row
-        .map((value, j) => (predicate(value) ? ([i, j] as Position) : null))
-        .filter(Boolean) as Position[],
-  )
+  grid.flatMap((row, i) =>
+    row
+      .map((value, j) => (predicate(value) ? ([i, j] as Position) : null))
+      .filter(Boolean),
+  ) as Position[]
 
 export const isSamePosition = (positionA: Position, positionB: Position) =>
   positionA?.[0] === positionB?.[0] && positionA?.[1] === positionB?.[1]

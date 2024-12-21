@@ -24,8 +24,8 @@ for (const serie of series) {
   let current = [...serie]
   while (current.some(x => x !== 0)) {
     history.push(current)
-    let differences: number[] = []
-    for (var i = 0; i < current.length - 1; i++) {
+    const differences: number[] = []
+    for (let i = 0; i < current.length - 1; i++) {
       differences.push(current[i + 1] - current[i])
     }
     current = differences
@@ -47,8 +47,8 @@ for (const serie of series) {
   let current = [...serie]
   while (current.some(x => x !== 0)) {
     history.push(current)
-    let differences: number[] = []
-    for (var i = 0; i < current.length - 1; i++) {
+    const differences: number[] = []
+    for (let i = 0; i < current.length - 1; i++) {
       differences.push(current[i + 1] - current[i])
     }
     current = differences

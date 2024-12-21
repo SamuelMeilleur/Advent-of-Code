@@ -24,7 +24,7 @@ const buildPath = (end: Node) => {
 }
 
 const findPath = (grid: Grid<string>, start: Position, end: Position) => {
-  const seen: Set<String> = new Set(String(start))
+  const seen: Set<string> = new Set(String(start))
   const queue: Node[] = [
     {
       position: start,

@@ -7,7 +7,7 @@ import data from './input'
 
 const calculateWinningCount = (line: string) => {
   const [winningNumbers, myNumbers] = line
-    .split(/\:\s+/)[1]
+    .split(/:\s+/)[1]
     .split(/\s+\|\s+/)
     .map(side => new Set(side.split(/\s+/)))
 
@@ -35,10 +35,10 @@ const scratchcards = new Map<string, number>(
 )
 lines.forEach((line, index) => {
   const winningNumbersCount = calculateWinningCount(line)
-  for (var i = index + 1; i <= index + winningNumbersCount; i++) {
+  for (let i = index + 1; i <= index + winningNumbersCount; i++) {
     scratchcards.set(
       String(i),
-      scratchcards.get(String(i)) + scratchcards.get(String(index)),
+      scratchcards.get(String(i))! + scratchcards.get(String(index))!,
     )
   }
 })

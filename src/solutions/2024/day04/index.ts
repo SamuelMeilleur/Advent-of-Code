@@ -29,8 +29,8 @@ const getDiagonals = (letters: Grid<string>) => {
       diagonal2 += letters[y][letters[0].length - x - 1]
     }
 
-    diagonal1 != '' && diagonals.push(diagonal1)
-    diagonal2 != '' && diagonals.push(diagonal2)
+    if (diagonal1 != '') diagonals.push(diagonal1)
+    if (diagonal2 != '') diagonals.push(diagonal2)
   }
 
   return diagonals

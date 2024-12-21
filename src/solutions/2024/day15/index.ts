@@ -52,9 +52,10 @@ const moveBox = (gridState: GridState, move: Direction): GridState => {
   while (true) {
     lookahead = movePosition(lookahead, DIRECTIONS[move])
     switch (getValueAtPosition(grid, lookahead)) {
-      case EMPTY:
+      case EMPTY: {
         const movedBoxGrid = swapGridValues(grid, boxPosition, lookahead)
         return [swapGridValues(movedBoxGrid, position, boxPosition), boxPosition]
+      }
       case BOX:
         continue
       case OBSTACLE:

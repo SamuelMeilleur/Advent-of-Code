@@ -5,6 +5,8 @@
  */
 import data from './input'
 
+type Range = [number, number]
+
 const lines = data
   .replace(/[^\d\n\s]/g, '')
   .split('\n\n')
@@ -14,7 +16,7 @@ const lines = data
       .split('\n')
       .map(entries => entries.split(' ')),
   )
-const seeds = lines.shift().at(0)
+const seeds = lines.shift()?.at(0) as string[]
 
 // Part 1
 let smallestLocation = Number.MAX_VALUE
@@ -38,7 +40,7 @@ for (const seed of seeds) {
 console.log(`Part 1: ${smallestLocation}`)
 
 // Part 2
-const seedsRanges: Array<[number, number]> = []
+const seedsRanges: Range[] = []
 for (let i = 0; i < seeds.length; i += 2) {
   const start = parseInt(seeds[i])
   const size = parseInt(seeds[i + 1])
@@ -49,7 +51,7 @@ for (const mappings of lines) {
   const mappedRanges: typeof seedsRanges = []
 
   while (seedsRanges.length > 0) {
-    const [start, end] = seedsRanges.pop()
+    const [start, end] = seedsRanges.pop() as Range
 
     let isMapped = false
     for (const mapping of mappings) {
@@ -82,7 +84,7 @@ for (const mappings of lines) {
 }
 
 smallestLocation = Number.MAX_VALUE
-for (const [location, _] of seedsRanges) {
+for (const [location] of seedsRanges) {
   smallestLocation = Math.min(location, smallestLocation)
 }
 

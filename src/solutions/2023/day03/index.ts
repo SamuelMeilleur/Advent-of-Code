@@ -5,7 +5,7 @@
  */
 import data from './input'
 
-const symbolRegExp = /[^\d\s\.]/g
+const symbolRegExp = /[^\d\s.]/g
 
 interface Position {
   row: number

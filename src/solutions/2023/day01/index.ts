@@ -19,7 +19,9 @@ console.log(`Part 1: ${answer1}`)
 
 // Part 2
 const extractDigits = (line: string) =>
-  [...line.matchAll(digitsRegExp)].map(([_, value]) => DIGITS[value] ?? value)
+  [...line.matchAll(digitsRegExp)].map(
+    ([_, value]) => DIGITS[value as keyof typeof DIGITS] ?? value,
+  )
 
 const answer2 = lines
   .map(line => extractCalibrationValue(extractDigits(line)))

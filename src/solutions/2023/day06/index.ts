@@ -12,7 +12,7 @@ interface Race {
 
 const calculateWins = (race: Race) => {
   let wins = 0
-  for (var i = 1; i < race.time; i++) {
+  for (let i = 1; i < race.time; i++) {
     if (race.distance < (race.time - i) * i) {
       wins += 1
     }

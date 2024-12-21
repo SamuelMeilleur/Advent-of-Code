@@ -45,7 +45,7 @@ describe('instructions', () => {
     })
 
     it('should execute opcode jnz', () => {
-      let registers = REGISTERS.slice() as Registers
+      const registers = REGISTERS.slice() as Registers
       const pointer = Math.floor(Math.random() * 1000)
       expect(
         executeInstruction(pointer, Instructions.jnz, 4, registers, []),
@@ -74,7 +74,7 @@ describe('instructions', () => {
 
     it('should execute opcode out', () => {
       const outputs: number[] = []
-      let registers = REGISTERS.slice() as Registers
+      const registers = REGISTERS.slice() as Registers
       executeInstruction(0, Instructions.out, 2, registers, outputs)
       expect(registers).toEqual([48n, 1n, 0n])
       expect(outputs).toEqual([2])

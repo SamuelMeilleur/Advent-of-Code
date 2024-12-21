@@ -78,7 +78,7 @@ const sortHands = (hand1: Hand, hand2: Hand) => {
     return diff
   }
 
-  for (var i = 0; i < 5; i++) {
+  for (let i = 0; i < 5; i++) {
     const card1 = CARD_VALUES[hand1.hand[i]]
     const card2 = CARD_VALUES[hand2.hand[i]]
     if (card1 !== card2) {

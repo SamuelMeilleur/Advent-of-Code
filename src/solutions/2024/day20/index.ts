@@ -15,20 +15,24 @@ type Maze = {
 const START = 'S'
 const END = 'E'
 
+const GOAL = 100
+
 const findCheatTimes = (path: Path, length: number) => {
   const timeSavings: number[] = []
-  for (const [index1, positionA] of path.slice(0, -length).entries()) {
-    for (const [delta, positionB] of path.slice(index1).entries()) {
-      const index2 = index1 + delta
+  let n = 0
+  for (const [index1, positionA] of path.slice(0, -GOAL).entries()) {
+    for (const [delta, positionB] of path.slice(index1 + GOAL).entries()) {
+      n += 1
       const distance = getManhattanDistance(positionA, positionB)
       if (distance > length) {
         continue
       }
-
+      const index2 = index1 + delta + GOAL
       timeSavings.push(Math.abs(index2 - index1) - distance)
     }
   }
-  return timeSavings.filter(time => time >= 100)
+  console.log(n)
+  return timeSavings.filter(time => time >= GOAL)
 }
 
 const grid = data.split('\n').map(row => row.split(''))
@@ -52,6 +56,8 @@ const { start, end } = grid.reduce<Maze>(
 
 // Part 1
 const regularPath = findPath(grid, start, end)
+console.log(regularPath.length)
+
 let result = findCheatTimes(regularPath, 2).length
 console.log(`Part 1: ${result}`)
 

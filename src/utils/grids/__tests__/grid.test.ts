@@ -2,6 +2,8 @@ import { describe } from 'node:test'
 import {
   copyGrid,
   findPositionsInGrid,
+  getManhattanDistance,
+  getNeighbors,
   getValueAtPosition,
   type Grid,
   isInGrid,
@@ -150,6 +152,38 @@ describe('grid', () => {
       testGrid[0][0] = null
       expect(copy[0][0]).not.toBeNull()
       expect(copy[0][0]).toBe(1)
+    })
+  })
+
+  describe('getNeighbors', () => {
+    it('should return the 4 positions neighbouring the given position', () => {
+      expect(getNeighbors([0, 0]).sort()).toEqual(
+        [
+          [-1, 0],
+          [0, -1],
+          [1, 0],
+          [0, 1],
+        ].sort(),
+      )
+    })
+
+    expect(getNeighbors([100, 0]).sort()).toEqual(
+      [
+        [99, 0],
+        [100, -1],
+        [101, 0],
+        [100, 1],
+      ].sort(),
+    )
+  })
+
+  describe('getManhattanDistance', () => {
+    it('should return the sum of absolute differences in x and y', () => {
+      expect(getManhattanDistance([0, 5], [100, 5])).toBe(100)
+      expect(getManhattanDistance([0, 5], [0, 95])).toBe(90)
+
+      expect(getManhattanDistance([50, 10], [150, 110])).toBe(200)
+      expect(getManhattanDistance([50, 50], [100, 100])).toBe(100)
     })
   })
 })

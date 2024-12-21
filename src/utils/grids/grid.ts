@@ -34,3 +34,9 @@ export const isSamePosition = (positionA: Position, positionB: Position) =>
 
 export const copyGrid = <T>(grid: Grid<T>): Grid<T> =>
   grid.map(row => row.slice())
+
+export const getNeighbors = (position: Position) =>
+  Object.values(DirectionVectors).map(vector => movePosition(position, vector))
+
+export const getManhattanDistance = (positionA: Position, positionB: Position) =>
+  Math.abs(positionA[0] - positionB[0]) + Math.abs(positionA[1] - positionB[1])

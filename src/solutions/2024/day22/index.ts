@@ -24,27 +24,6 @@ const calculateNextSecret = (secret: number) => {
   return next
 }
 
-const getMostBananas = (sequencesMaps: Map<SequenceID, number>[]) => {
-  let mostBananas = 0
-  const cache: Set<SequenceID> = new Set()
-  for (let i = 0; i < sequencesMaps.length; i++) {
-    for (const [sequence] of sequencesMaps[i].entries()) {
-      if (cache.has(sequence)) continue
-
-      const bananas = sequencesMaps
-        .slice(i)
-        .map(sequences => sequences.get(sequence))
-        .filter(Boolean)
-        .reduce<number>((sum, count) => sum + count!, 0)
-
-      mostBananas = Math.max(bananas, mostBananas)
-      cache.add(sequence)
-    }
-  }
-
-  return mostBananas
-}
-
 // Part 1
 const initialSecrets = data.split('\n').map(Number)
 const secrets = initialSecrets.map(secret => {
@@ -58,32 +37,34 @@ let result = secrets.reduce((sum, secret) => sum + secret, 0)
 console.log(`Part 1: ${result}`)
 
 // Part 2
-const priceChanges = initialSecrets.map(secret => {
-  const priceChanges: { price: number; change: number }[] = []
-  for (let i = 0; i < SECRETS_COUNT; i++) {
-    const next = calculateNextSecret(secret)
-    priceChanges.push({
-      price: next % 10,
-      change: (next % 10) - (secret % 10),
-    })
-    secret = next
-  }
-  return priceChanges
-})
+const sequencesCount = initialSecrets
+  .map(secret => {
+    const prices: { price: number; change: number }[] = []
+    for (let i = 0; i < SECRETS_COUNT; i++) {
+      const next = calculateNextSecret(secret)
+      prices.push({
+        price: next % 10,
+        change: (next % 10) - (secret % 10),
+      })
+      secret = next
+    }
+    return prices
+  })
+  .reduce<Map<SequenceID, number>>((acc, prices) => {
+    const seen: Set<SequenceID> = new Set()
+    for (let i = 0; i <= prices.length - 4; i++) {
+      const window = prices.slice(i, i + 4).map(({ change }) => change)
+      const id = String(window)
+      if (!seen.has(id)) {
+        seen.add(id)
+        acc.set(id, prices[i + 3].price + (acc.get(id) ?? 0))
+      }
+    }
+    return acc
+  }, new Map())
 
-const sequencesMaps = priceChanges.map(list => {
-  const window = list.slice(0, 4).map(({ change }) => change)
-  const map: Map<SequenceID, number> = new Map()
-  for (let i = 4; i <= list.length; i++) {
-    const id = String(window)
-    if (!map.has(id)) map.set(id, list[i - 1].price)
-
-    window.shift()
-    window.push(list[i]?.change)
-  }
-
-  return map
-})
-
-result = getMostBananas(sequencesMaps)
+result = Array.from(sequencesCount.values()).reduce<number>(
+  (most, count) => Math.max(most, count),
+  0,
+)
 console.log(`Part 2: ${result}`)

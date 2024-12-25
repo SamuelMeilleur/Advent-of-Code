@@ -18,7 +18,6 @@ const countPossibleDesigns = memoize(
       0,
     )
   },
-  (design: string) => design,
 )
 
 const [patterns, designs] = data
@@ -32,4 +31,4 @@ console.log(`Part 1: ${result}`)
 
 // Part 2
 result = scores.reduce((sum, score) => sum + score, 0)
-console.log(`Part 1: ${result}`)
+console.log(`Part 2: ${result}`)

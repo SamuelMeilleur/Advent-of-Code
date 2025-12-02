@@ -14,7 +14,7 @@
   "type": "module",
   "dependencies": {
     "lodash-es": "^4.17.21",
-    "node": "^20.18.1",
+    "node": "^24",
     "npx": "^3.0.0",
     "prettier": "^3.4.2",
     "tsx": "^4.19.2",

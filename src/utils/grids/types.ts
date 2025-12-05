@@ -1,4 +1,4 @@
-type Grid<T> = T[][]
+type Grid<T = string> = T[][]
 
 type Vector = [number, number]
 type Position = Vector
